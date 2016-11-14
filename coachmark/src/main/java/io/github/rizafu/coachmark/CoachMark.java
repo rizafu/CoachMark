@@ -302,7 +302,11 @@ public class CoachMark {
         return this;
     }
 
-    public void dismiss() {
+    public void dismiss(){
+        dismiss(null);
+    }
+
+    public void dismiss(final Runnable afterDismiss) {
         ViewCompat.animate(container)
                 .alpha(0f)
                 .setDuration(container.getResources().getInteger(android.R.integer.config_mediumAnimTime))
@@ -311,11 +315,16 @@ public class CoachMark {
                     public void onAnimationEnd(View view) {
                         super.onAnimationEnd(view);
                         if (container.getAlpha()== 0f) container.setVisibility(View.GONE);
+                        if (afterDismiss!=null)afterDismiss.run();
                     }
                 }).start();
     }
 
     public void destroy(){
+        destroy(null);
+    }
+
+    public void destroy(final Runnable afterDestroy){
         ViewCompat.animate(container)
                 .alpha(0f)
                 .setDuration(container.getResources().getInteger(android.R.integer.config_mediumAnimTime))
@@ -327,6 +336,7 @@ public class CoachMark {
                         if (parent instanceof ViewGroup) {
                             ((ViewGroup) parent).removeView(view);
                         }
+                        if (afterDestroy != null) afterDestroy.run();
                     }
                 }).start();
     }

@@ -62,8 +62,12 @@ public class CoachMarkSequence {
     private CoachMark.Builder.OnClick onClick = new CoachMark.Builder.OnClick() {
         @Override
         public void onClick(CoachMark coachMark) {
-            coachMark.destroy();
-            showNext();
+            coachMark.destroy(new Runnable() {
+                @Override
+                public void run() {
+                    showNext();
+                }
+            });
         }
     };
 
