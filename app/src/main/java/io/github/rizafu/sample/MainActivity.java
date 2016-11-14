@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import io.github.rizafu.coachmark.CoachMark;
+import io.github.rizafu.coachmark.CoachMarkSequence;
 import io.github.rizafu.sample.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -68,20 +69,22 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu1:
-                showCoachMarck();
+                showCoachMark();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showCoachMarck(){
-        new CoachMark.Builder(this)
+    private void showCoachMark(){
+        new CoachMarkSequence().setCoachMarks(
+                new CoachMark.Builder(this).setTarget(R.id.menu1),
+                new CoachMark.Builder(this)
                 .setTarget(binding.cardView)
                 .setOnClickTarget(new CoachMark.Builder.OnClick() {
                     @Override
                     public void onClick(CoachMark coachMark) {
-                        coachMark.destroy();
                         Toast.makeText(MainActivity.this, "test click target", Toast.LENGTH_SHORT).show();
+                        coachMark.dismiss();
                     }
                 })
                 .setTooltipBackgroundColor(R.color.colorAccent)
@@ -90,11 +93,18 @@ public class MainActivity extends AppCompatActivity {
                 .setAction("ok", new CoachMark.Builder.OnClick() {
                     @Override
                     public void onClick(CoachMark coachMark) {
-                        coachMark.destroy();
+                        coachMark.dismiss();
                     }
                 })
                 .setDescription("description of hello world")
-                .setTooltipAlignment(CoachMark.TARGET_BOTTOM)
-                .show();
+                .setTooltipAlignment(CoachMark.TARGET_BOTTOM),
+                new CoachMark.Builder(this).setTarget(binding.textView))
+                .setListener(new CoachMarkSequence.Listener() {
+                    @Override
+                    public void onSequenceFinish() {
+                        Toast.makeText(MainActivity.this, "Sequence finish", Toast.LENGTH_SHORT).show();
+                    }
+                }).start();
+
     }
 }

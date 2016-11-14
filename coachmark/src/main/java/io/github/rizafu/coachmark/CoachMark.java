@@ -436,6 +436,11 @@ public class CoachMark {
             return this;
         }
 
+        public Builder setOnClickAction(OnClick onClickAction) {
+            this.onClickAction = onClickAction;
+            return this;
+        }
+
         public CoachMark build(){
             final CoachMark coachMark = new CoachMark(this);
             coachMark.setAcitonClick(new View.OnClickListener() {
