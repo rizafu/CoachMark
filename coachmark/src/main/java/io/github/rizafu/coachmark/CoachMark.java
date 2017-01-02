@@ -41,6 +41,7 @@ public class CoachMark {
     private boolean dismissible;
     private boolean isCircleMark;
     private boolean isShow;
+    private float backgroundAlpha;
     private WidgetCoachTooltipViewModel tooltipViewModel;
     private WidgetCoachTooltipBinding tooltipBinding;
     private CoachMarkOverlay coachMarkOverlay;
@@ -77,7 +78,7 @@ public class CoachMark {
         this.tooltipBinding = DataBindingUtil.inflate(activity.getLayoutInflater(),R.layout.widget_coach_tooltip,container,false);
         this.tooltipBinding.setViewModel(this.tooltipViewModel);
 
-        this.backgroundColorResource = builder.isTransparentBackground ? android.R.color.transparent : R.color.background;
+        this.backgroundColorResource = android.R.color.black;
         this.isCircleMark = builder.isCircleMark;
         this.targetView = builder.target;
         this.overlayPadding = builder.markerPadding;
@@ -99,6 +100,7 @@ public class CoachMark {
                     decorView.addView(container, layoutParams);
                     coachMarkOverlay = new CoachMarkOverlay(activity);
                     coachMarkOverlay.setBackgroundResource(backgroundColorResource);
+                    coachMarkOverlay.setAlpha(backgroundAlpha);
                     container.addView(coachMarkOverlay,layoutParams);
                     container.addView(tooltipBinding.getRoot());
                 }
@@ -161,6 +163,7 @@ public class CoachMark {
         final int height = rect.height();
         addTargetClick(rect,view);
         coachMarkOverlay.setBackgroundResource(backgroundColorResource);
+        coachMarkOverlay.setAlpha(backgroundAlpha);
         coachMarkOverlay.addRect(x,y,width,height, radius,overlayPadding,isCircleMark);
         coachMarkOverlay.postInvalidate();
     }
@@ -174,6 +177,7 @@ public class CoachMark {
         int radius = (int) (Math.max(rect.width(), rect.height()) / 2f * CIRCLE_ADDITIONAL_RADIUS_RATIO);
         addTargetClick(rect,view);
         coachMarkOverlay.setBackgroundResource(backgroundColorResource);
+        coachMarkOverlay.setAlpha(backgroundAlpha);
         coachMarkOverlay.addRect(cx,cy,0,0, radius, overlayPadding,isCircleMark);
         coachMarkOverlay.postInvalidate();
     }
