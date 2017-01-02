@@ -12,12 +12,18 @@ import java.util.Queue;
 
 public class CoachMarkSequence {
     private Queue<CoachMark.Builder> coachMarks;
+    private CoachMark coachMark;
     private boolean started;
 
-    Listener listener;
+    private OnSequenceFinish OnSequenceFinish;
+    private OnSequenceShowNext onSequenceShowNext;
 
-    public interface Listener {
+    public interface OnSequenceFinish {
         void onSequenceFinish();
+    }
+
+    public interface OnSequenceShowNext{
+        void OnSequenceShowNext(CoachMarkSequence coachMarkSequence, CoachMark coachMark);
     }
 
     public CoachMarkSequence() {
@@ -39,8 +45,13 @@ public class CoachMarkSequence {
         return this;
     }
 
-    public CoachMarkSequence setListener(Listener listener) {
-        this.listener = listener;
+    public CoachMarkSequence setOnSequenceFinish(OnSequenceFinish OnSequenceFinish) {
+        this.OnSequenceFinish = OnSequenceFinish;
+        return this;
+    }
+
+    public CoachMarkSequence setOnSequenceShowNext(OnSequenceShowNext onSequenceShowNext) {
+        this.onSequenceShowNext = onSequenceShowNext;
         return this;
     }
 
@@ -48,14 +59,26 @@ public class CoachMarkSequence {
         if (coachMarks.isEmpty() || started) return;
 
         started = true;
-        showNext();
+        next();
     }
 
-    private void showNext() {
+    public void showNext(){
+        coachMark.destroy(new Runnable() {
+            @Override
+            public void run() {
+                next();
+            }
+        });
+    }
+
+    private void next() {
         try{
-            coachMarks.remove().setOnClickTarget(onClick).setOnClickAction(onClick).show();
+            coachMark = coachMarks.remove().setOnClickTarget(onClick).show();
+            if (onSequenceShowNext!=null){
+                onSequenceShowNext.OnSequenceShowNext(this,coachMark);
+            }
         } catch (NoSuchElementException e){
-            if (listener != null) listener.onSequenceFinish();
+            if (OnSequenceFinish != null) OnSequenceFinish.onSequenceFinish();
         }
     }
 
@@ -65,7 +88,7 @@ public class CoachMarkSequence {
             coachMark.destroy(new Runnable() {
                 @Override
                 public void run() {
-                    showNext();
+                    next();
                 }
             });
         }
