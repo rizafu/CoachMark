@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
@@ -21,54 +22,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:tint="@{viewModel.backgroundColor}"
-            app:srcCompat="@drawable/ic_triangle_onboarding"/>
+            bind:tooltipTint="@{viewModel.backgroundColor}"
+            app:srcCompat="@drawable/ic_triangle"/>
 
         <LinearLayout
+            android:id="@+id/tooltip"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{viewModel.backgroundColor}"
-            android:padding="24dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@{viewModel.textColorResource}"
-                android:textSize="24sp"
-                android:text="@{viewModel.title}"
-                android:visibility="@{viewModel.title == null ? View.GONE : View.VISIBLE}"
-                tools:text="Task Detail Screen" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="@{viewModel.textColorResource}"
-                android:textSize="16sp"
-                android:text="@{viewModel.description}"
-                android:visibility="@{viewModel.description == null ? View.GONE : View.VISIBLE}"
-                tools:text="Task Detail Screen" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@{viewModel.actionName}"
-                android:visibility="@{viewModel.actionName == null ? View.GONE : View.VISIBLE}"
-                android:onClick="@{viewModel.actionClick}"
-                tools:text="OK"/>
-
-        </LinearLayout>
+            android:layout_marginTop="-1dp"
+            bind:tooltipMatchWidth="@{viewModel.matchWidth}"
+            bind:tooltipBackground="@{viewModel.backgroundColor}"
+            bind:tooltipChild="@{viewModel.tooltipChild}" />
 
         <ImageView
             android:id="@+id/triangle_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:rotation="180"
+            android:layout_marginTop="-1dp"
             android:visibility="gone"
-            android:tint="@{viewModel.backgroundColor}"
-            app:srcCompat="@drawable/ic_triangle_onboarding"/>
+            bind:tooltipTint="@{viewModel.backgroundColor}"
+            app:srcCompat="@drawable/ic_triangle"/>
     </LinearLayout>
 
 </layout>

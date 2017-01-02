@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 
 import io.github.rizafu.coachmark.databinding.WidgetCoachTooltipBinding;
 
@@ -37,6 +38,7 @@ public class CoachMark {
     private @TooltipAlignment int tooltipAlignment;
     private @PointerTooltipAlignment int tooltipPointerAlignment;
     private int overlayPadding;
+    private int tooltipMargin;
     private int backgroundColorResource;
     private boolean dismissible;
     private boolean isCircleMark;
@@ -84,9 +86,11 @@ public class CoachMark {
         this.overlayPadding = builder.markerPadding;
         this.dismissible = builder.dismissible;
         this.tooltipAlignment = builder.tooltipAlignment;
+        this.tooltipMargin = ViewUtils.dpToPx(builder.tooltipMargin);
         this.onDismissListener = builder.onDismissListener;
         this.tooltipShowAnimation = builder.tooltipShowAnimation;
         this.tooltipDismissAnimation = builder.tooltipDismissAnimation;
+        tooltipViewModel.tooltipChild.addAll(builder.tooltipChilds);
 
         Window window = activity.getWindow();
         if (window != null) {

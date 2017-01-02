@@ -1,61 +1,83 @@
 package io.github.rizafu.coachmark;
 
 import android.databinding.BindingAdapter;
-import android.databinding.ObservableField;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableInt;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 /**
  * Created by RizaFu on 11/9/16.
  */
 
 public class WidgetCoachTooltipViewModel {
-    public ObservableField<String> title;
-    public ObservableField<String> description;
-    public ObservableField<String> actionName;
-    public ObservableInt textColorResource;
+    public ObservableArrayList<View> tooltipChild;
     public ObservableInt backgroundColor;
-    public View.OnClickListener actionClick;
+    public ObservableBoolean matchWidth;
 
     public WidgetCoachTooltipViewModel() {
-        this.title = new ObservableField<>();
-        this.description = new ObservableField<>();
-        this.actionName = new ObservableField<>();
-        this.textColorResource = new ObservableInt();
+        this.tooltipChild = new ObservableArrayList<>();
         this.backgroundColor = new ObservableInt();
+        this.matchWidth = new ObservableBoolean();
     }
 
-    @BindingAdapter("android:textColor")
-    public static void setTextColor(TextView view, int color){
-        if (color==0){
-            view.setTextColor(ContextCompat.getColor(view.getContext(),android.R.color.primary_text_light));
-        } else {
-            view.setTextColor(ContextCompat.getColor(view.getContext(),color));
+    @BindingAdapter({"tooltipBackground","tooltipMatchWidth"})
+    public static void setBackground(LinearLayout layout, int color, boolean matchWidth){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(matchWidth ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(params);
+
+        if (matchWidth){
+            if (color==0 || color<0){
+                layout.setBackgroundColor(ContextCompat.getColor(layout.getContext(),android.R.color.white));
+            } else {
+                layout.setBackgroundColor(ContextCompat.getColor(layout.getContext(),color));
+            }
+        } else {// for rounded corner
+            Drawable drawable = ContextCompat.getDrawable(layout.getContext(),R.drawable.shp_card);
+            if (color==0 || color<0){
+                drawable.setColorFilter(ContextCompat.getColor(layout.getContext(),android.R.color.white), PorterDuff.Mode.MULTIPLY);
+            } else {
+                drawable.setColorFilter(ContextCompat.getColor(layout.getContext(),color), PorterDuff.Mode.MULTIPLY);
+            }
+            layout.setBackground(drawable);
         }
+
+
+        layout.invalidate();
     }
 
-    @BindingAdapter("android:background")
-    public static void setBackground(View view, int color){
-        if (color==0){
-            view.setBackgroundColor(ContextCompat.getColor(view.getContext(),android.R.color.white));
-        } else {
-            view.setBackgroundColor(ContextCompat.getColor(view.getContext(),color));
-        }
-    }
-
-    @BindingAdapter("android:tint")
+    @BindingAdapter("tooltipTint")
     public static void setTint(ImageView view, int color){
-        if (color==0){
+        if (color==0 || color<0){
             view.setColorFilter(ContextCompat.getColor(view.getContext(),android.R.color.white));
         } else {
             view.setColorFilter(ContextCompat.getColor(view.getContext(),color));
         }
+        view.invalidate();
     }
 
-    boolean isEmptyValue(){
-        return title.get() == null && description.get() == null && actionName.get() == null;
+    @BindingAdapter("tooltipChild")
+    public static void setChild(LinearLayout layout, ArrayList<View> views){
+        layout.removeAllViews();
+        if (views!=null && views.size()>0){
+            for (int i = 0; i < views.size(); i++) {
+                View child = views.get(i);
+                child.setTag(i);
+                layout.addView(child);
+            }
+        }
+        layout.invalidate();
+    }
+
+    boolean isEmptyValue() {
+        return tooltipChild == null || tooltipChild.isEmpty();
     }
 }
