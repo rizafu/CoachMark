@@ -303,7 +303,7 @@ public class CoachMark {
         int result;
         Context context = activity;
         Resources resources = context.getResources();
-        result = resources.getDisplayMetrics().heightPixels;
+        result = resources.getDisplayMetrics().widthPixels;
         return result;
     }
 
