@@ -35,6 +35,7 @@ public class CoachMark {
     private FrameLayout container;
 
     private @TooltipAlignment int tooltipAlignment;
+    private @PointerTooltipAlignment int tooltipPointerAlignment;
     private int overlayPadding;
     private int backgroundColorResource;
     private boolean dismissible;
@@ -64,8 +65,9 @@ public class CoachMark {
     public static final int POINTER_RIGHT = 1;
     public static final int POINTER_MIDDLE = 2;
     public static final int POINTER_LEFT = 3;
+    public static final int POINTER_GONE = 4;
 
-    @IntDef({POINTER_RIGHT,POINTER_MIDDLE,POINTER_LEFT})
+    @IntDef({POINTER_RIGHT,POINTER_MIDDLE,POINTER_LEFT,POINTER_GONE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface PointerTooltipAlignment{}
 
@@ -128,6 +130,7 @@ public class CoachMark {
 
     private void setTooltipAlignment(@TooltipAlignment final int tooltipAlignment, @PointerTooltipAlignment final int pointerTooltipAlignment){
         this.tooltipAlignment = tooltipAlignment;
+        this.tooltipPointerAlignment = pointerTooltipAlignment;
         tooltipBinding.getRoot().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
@@ -425,6 +428,7 @@ public class CoachMark {
             this.activity = activity;
             this.tooltipAlignment = CoachMark.ROOT_BOTTOM; // default
             this.pointerTooltipAlignment = CoachMark.POINTER_MIDDLE; // default
+            this.pointerTooltipAlignment = CoachMark.POINTER_MIDDLE;
         }
 
         @Nullable
@@ -476,6 +480,8 @@ public class CoachMark {
 
         public Builder setDescription(String description){
             this.description = description;
+        public Builder setTooltipPointer(@PointerTooltipAlignment int pointerTooltipAlignment) {
+            this.pointerTooltipAlignment = pointerTooltipAlignment;
             return this;
         }
 
