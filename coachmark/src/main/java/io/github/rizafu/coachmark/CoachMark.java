@@ -40,6 +40,7 @@ public class CoachMark {
     private int overlayPadding;
     private int tooltipMargin;
     private int backgroundColorResource;
+    private int radius;
     private boolean dismissible;
     private boolean isCircleMark;
     private boolean isShow;
@@ -90,6 +91,7 @@ public class CoachMark {
         this.onDismissListener = builder.onDismissListener;
         this.tooltipShowAnimation = builder.tooltipShowAnimation;
         this.tooltipDismissAnimation = builder.tooltipDismissAnimation;
+        this.radius = builder.radius;
         tooltipViewModel.tooltipChild.addAll(builder.tooltipChilds);
 
         Window window = activity.getWindow();
@@ -155,7 +157,7 @@ public class CoachMark {
     private void addRoundRect(View view){
         Rect rect = new Rect();
         view.getGlobalVisibleRect(rect);
-        int radius = 5;
+        int radius = this.radius;
         if (view instanceof CardView){
             CardView cardView = (CardView) view;
             radius = (int) cardView.getRadius();
