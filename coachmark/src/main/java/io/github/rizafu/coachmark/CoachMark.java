@@ -38,6 +38,7 @@ public class CoachMark {
     private boolean dismissible;
     private boolean isCircleMark;
     private Builder builder;
+    private boolean isShow;
     private WidgetCoachTooltipViewModel tooltipViewModel;
     private WidgetCoachTooltipBinding tooltipBinding;
     private CoachMarkOverlay coachMarkOverlay;
@@ -293,6 +294,7 @@ public class CoachMark {
                 .setDuration(container.getResources().getInteger(android.R.integer.config_longAnimTime))
                 .start();
 
+        isShow = true;
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -316,6 +318,7 @@ public class CoachMark {
                         super.onAnimationEnd(view);
                         if (container.getAlpha()== 0f) container.setVisibility(View.GONE);
                         if (afterDismiss!=null)afterDismiss.run();
+                            isShow = false;
                     }
                 }).start();
     }
@@ -335,6 +338,7 @@ public class CoachMark {
                         ViewParent parent = view.getParent();
                         if (parent instanceof ViewGroup) {
                             ((ViewGroup) parent).removeView(view);
+                            isShow = false;
                         }
                         if (afterDestroy != null) afterDestroy.run();
                     }
