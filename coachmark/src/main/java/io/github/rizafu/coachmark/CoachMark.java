@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.animation.Animation;
 import android.widget.FrameLayout;
 
 import java.lang.annotation.Retention;
@@ -29,6 +30,7 @@ import io.github.rizafu.coachmark.databinding.WidgetCoachTooltipBinding;
  */
 
 public class CoachMark {
+    private int animDuration;
     private Activity activity;
     private FrameLayout container;
 
@@ -44,6 +46,9 @@ public class CoachMark {
     private CoachMarkOverlay coachMarkOverlay;
     private View targetView;
     private View.OnClickListener targetOnClick;
+    private Runnable onDismissListener;
+    private Animation tooltipShowAnimation;
+    private Animation tooltipDismissAnimation;
 
     private final double CIRCLE_ADDITIONAL_RADIUS_RATIO = 1.5f;
 
@@ -83,6 +88,9 @@ public class CoachMark {
         tooltipViewModel.actionName.set(builder.actionName);
         tooltipViewModel.backgroundColor.set(builder.tooltipBagroundColor);
         tooltipViewModel.textColorResource.set(builder.textColor);
+        this.onDismissListener = builder.onDismissListener;
+        this.tooltipShowAnimation = builder.tooltipShowAnimation;
+        this.tooltipDismissAnimation = builder.tooltipDismissAnimation;
 
         Window window = activity.getWindow();
         if (window != null) {
@@ -101,6 +109,7 @@ public class CoachMark {
                 }
             }
         }
+        animDuration = container.getResources().getInteger(android.R.integer.config_longAnimTime);
         container.setClickable(true);
         container.setVisibility(View.GONE);
         ViewCompat.setAlpha(container,0f);
@@ -286,12 +295,43 @@ public class CoachMark {
         container.invalidate();
     }
 
+    private void animateTooltipShow(){
+        tooltipBinding.getRoot().setVisibility(tooltipViewModel.isEmptyValue() ? View.GONE : View.VISIBLE);
+        if (!tooltipViewModel.isEmptyValue() && tooltipShowAnimation!=null) {
+            tooltipBinding.getRoot().startAnimation(tooltipShowAnimation);
+        }
+    }
+
+    private void animateTooltipDismiss(){
+        if (!tooltipViewModel.isEmptyValue() && tooltipDismissAnimation!=null) {
+            tooltipDismissAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if (tooltipBinding.getRoot().getVisibility() == View.VISIBLE) {
+                        tooltipBinding.getRoot().setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            tooltipBinding.getRoot().startAnimation(tooltipDismissAnimation);
+        }
+    }
+
     public CoachMark show(){
         container.setVisibility(View.VISIBLE);
-        tooltipBinding.getRoot().setVisibility(tooltipViewModel.isEmptyValue() ? View.GONE : View.VISIBLE);
+        animateTooltipShow();
         ViewCompat.animate(container)
                 .alpha(1f)
-                .setDuration(container.getResources().getInteger(android.R.integer.config_longAnimTime))
+                .setDuration(animDuration)
                 .start();
 
         isShow = true;
@@ -309,16 +349,20 @@ public class CoachMark {
     }
 
     public void dismiss(final Runnable afterDismiss) {
+        if (onDismissListener !=null) onDismissListener.run();
+        animateTooltipDismiss();
         ViewCompat.animate(container)
                 .alpha(0f)
-                .setDuration(container.getResources().getInteger(android.R.integer.config_mediumAnimTime))
+                .setDuration(animDuration)
                 .setListener(new ViewPropertyAnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(View view) {
                         super.onAnimationEnd(view);
-                        if (container.getAlpha()== 0f) container.setVisibility(View.GONE);
-                        if (afterDismiss!=null)afterDismiss.run();
+                        if (container.getAlpha()== 0f) {
+                            container.setVisibility(View.GONE);
                             isShow = false;
+                            if (afterDismiss!=null)afterDismiss.run();
+                        }
                     }
                 }).start();
     }
@@ -328,19 +372,23 @@ public class CoachMark {
     }
 
     public void destroy(final Runnable afterDestroy){
+        if (onDismissListener !=null) onDismissListener.run();
+        animateTooltipDismiss();
         ViewCompat.animate(container)
                 .alpha(0f)
-                .setDuration(container.getResources().getInteger(android.R.integer.config_mediumAnimTime))
+                .setDuration(animDuration)
                 .setListener(new ViewPropertyAnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(View view) {
                         super.onAnimationEnd(view);
-                        ViewParent parent = view.getParent();
-                        if (parent instanceof ViewGroup) {
-                            ((ViewGroup) parent).removeView(view);
+                        if (container.getAlpha()== 0f) {
+                            ViewParent parent = view.getParent();
+                            if (parent instanceof ViewGroup) {
+                                ((ViewGroup) parent).removeView(view);
+                            }
                             isShow = false;
+                            if (afterDestroy != null) afterDestroy.run();
                         }
-                        if (afterDestroy != null) afterDestroy.run();
                     }
                 }).start();
     }
@@ -365,6 +413,9 @@ public class CoachMark {
         private int tooltipBagroundColor;
         private int tooltipAlignment;
         private int pointerTooltipAlignment;
+        private Runnable onDismissListener;
+        private Animation tooltipShowAnimation;
+        private Animation tooltipDismissAnimation;
 
         public interface OnClick{
             void onClick(CoachMark coachMark);
@@ -446,6 +497,18 @@ public class CoachMark {
 
         public Builder setTooltipBackgroundColor(int colorResource) {
             this.tooltipBagroundColor = colorResource;
+        public Builder setOnDismissListener(Runnable onDismiss) {
+            this.onDismissListener = onDismiss;
+            return this;
+        }
+
+        public Builder setTooltipShowAnimation(Animation tooltipShowAnimation) {
+            this.tooltipShowAnimation = tooltipShowAnimation;
+            return this;
+        }
+
+        public Builder setTooltipDismissAnimation(Animation tooltipDismissAnimation) {
+            this.tooltipDismissAnimation = tooltipDismissAnimation;
             return this;
         }
 
