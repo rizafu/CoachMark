@@ -453,16 +453,14 @@ public class CoachMark {
 
         public CoachMark build(){
             final CoachMark coachMark = new CoachMark(this);
-            coachMark.setAcitonClick(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onClickAction.onClick(coachMark);
-                }
-            });
             coachMark.setTargetOnClick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickTarget.onClick(coachMark);
+                    if (onClickTarget!=null) {
+                        onClickTarget.onClick(coachMark);
+                    } else {
+                        coachMark.destroy();
+                    }
                 }
             });
             return coachMark;
