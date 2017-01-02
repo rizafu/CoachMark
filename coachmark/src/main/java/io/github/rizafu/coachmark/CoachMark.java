@@ -341,6 +341,10 @@ public class CoachMark {
                 }).start();
     }
 
+    public boolean isShow(){
+        return isShow;
+    }
+
     public static class Builder{
         private Activity activity;
         private View target;
