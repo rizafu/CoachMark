@@ -84,15 +84,20 @@ public class CoachMark {
         this.backgroundColorResource = android.R.color.black;
         this.isCircleMark = builder.isCircleMark;
         this.targetView = builder.target;
-        this.overlayPadding = builder.markerPadding;
+        this.overlayPadding = ViewUtils.dpToPx(builder.markerPadding);
         this.dismissible = builder.dismissible;
         this.tooltipAlignment = builder.tooltipAlignment;
+        this.tooltipPointerAlignment = builder.pointerTooltipAlignment;
         this.tooltipMargin = ViewUtils.dpToPx(builder.tooltipMargin);
         this.onDismissListener = builder.onDismissListener;
         this.tooltipShowAnimation = builder.tooltipShowAnimation;
         this.tooltipDismissAnimation = builder.tooltipDismissAnimation;
         this.radius = builder.radius;
+        this.backgroundAlpha = builder.backgroundAlpha;
+
+        tooltipViewModel.backgroundColor.set(builder.tooltipBackgroundColor);
         tooltipViewModel.tooltipChild.addAll(builder.tooltipChilds);
+        tooltipViewModel.matchWidth.set(builder.tooltipMatchWidth);
 
         Window window = activity.getWindow();
         if (window != null) {
@@ -139,19 +144,23 @@ public class CoachMark {
     }
 
     private void addTarget(){
-        if (targetView!=null)
-        targetView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                if (isCircleMark){
-                    addCircleRect(targetView);
-                } else {
-                    addRoundRect(targetView);
+        if (targetView==null){
+            setTooltipAlignment(tooltipAlignment, tooltipPointerAlignment);
+        } else {
+            targetView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    if (isCircleMark) {
+                        addCircleRect(targetView);
+                    } else {
+                        addRoundRect(targetView);
+                    }
+                    setTooltipAlignment(tooltipAlignment, tooltipPointerAlignment);
+                    targetView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    return false;
                 }
-                targetView.getViewTreeObserver().removeOnPreDrawListener(this);
-                return false;
-            }
-        });
+            });
+        }
     }
 
     private void addRoundRect(View view){
@@ -192,27 +201,43 @@ public class CoachMark {
         View tooltipView = tooltipBinding.getRoot();
 
         final int tooltipHeight = tooltipView.getHeight();
-        final int defaultPadding = 10;
-        final int padding = ViewUtils.dpToPx(overlayPadding + defaultPadding);
-        final int triangleHeight = ViewUtils.dpToPx(12);
+        final int padding = overlayPadding + tooltipMargin;
+        final int triangleHeight = tooltipPointerAlignment != POINTER_GONE ? ViewUtils.dpToPx(12) : ViewUtils.dpToPx(0);
 
-        if (view!=null) {
+        if (view!=null && !tooltipViewModel.isEmptyValue()) {
             Rect rect = new Rect();
             view.getGlobalVisibleRect(rect);
 
             final int y = rect.top;
             final int height = rect.height();
             float result;
+            // setY
             if (alignment == TARGET_BOTTOM) {
-                tooltipBinding.triangleTop.setVisibility(View.VISIBLE);
                 result = y + height + padding;
-                result = (float) (result + (isCircleMark? defaultPadding * CIRCLE_ADDITIONAL_RADIUS_RATIO : 0));
+                result = (float) (result + (isCircleMark? tooltipMargin * CIRCLE_ADDITIONAL_RADIUS_RATIO : 0));
                 tooltipView.setY(result);
             } else if (alignment == TARGET_TOP){
-                tooltipBinding.triangleBottom.setVisibility(View.VISIBLE);
                 result = y - tooltipHeight - padding - triangleHeight;
-                result = (float) (result - (isCircleMark? defaultPadding * CIRCLE_ADDITIONAL_RADIUS_RATIO : 0));
+                result = (float) (result - (isCircleMark? tooltipMargin * CIRCLE_ADDITIONAL_RADIUS_RATIO : 0));
                 tooltipView.setY(result);
+            }
+
+            // setX
+            if (!tooltipViewModel.matchWidth.get()) {
+                final int x = rect.left;
+                final int width = rect.width();
+                final int centerXTarget = x + (width/2);
+
+                result = centerXTarget - (tooltipBinding.tooltip.getWidth()/2);
+
+                final float rTooltip = result + tooltipBinding.tooltip.getWidth();
+                if (rTooltip > getScreenWidth()){
+                    result = result - (rTooltip - getScreenWidth());
+                }
+                if (result <0){
+                    result = 0;
+                }
+                tooltipBinding.tooltip.setX(result);
             }
         }
 
@@ -231,26 +256,27 @@ public class CoachMark {
 
         final int x = rect.left;
         final int width = rect.width();
-        final int margin = ViewUtils.dpToPx(overlayPadding + 16);
+        final int margin = overlayPadding + ViewUtils.dpToPx(16);
         final int triangleWidth = ViewUtils.dpToPx(24);
         int result = 0;
 
-        if (pointerTooltipAlignment == POINTER_LEFT){
-            result = x + margin;
-        } else if (pointerTooltipAlignment == POINTER_MIDDLE){
-            result = x + (width/2);
-        } else if (pointerTooltipAlignment == POINTER_RIGHT){
-            result = x + (width-margin);
+        if (pointerTooltipAlignment != POINTER_GONE) {
+            if (pointerTooltipAlignment == POINTER_LEFT){
+                result = x + margin;
+            } else if (pointerTooltipAlignment == POINTER_MIDDLE){
+                result = x + (width/2);
+            } else if (pointerTooltipAlignment == POINTER_RIGHT){
+                result = x + (width-margin);
+            }
+
+            View triangle = this.tooltipAlignment == TARGET_TOP ? tooltipBinding.triangleBottom : tooltipBinding.triangleTop;
+            triangle.setVisibility(View.VISIBLE);
+            triangle.setX(result - (triangleWidth/2));
+        } else {
+            tooltipBinding.triangleBottom.setVisibility(View.GONE);
+            tooltipBinding.triangleTop.setVisibility(View.GONE);
         }
 
-        View triangle;
-        if (this.tooltipAlignment == TARGET_TOP){
-            triangle = tooltipBinding.triangleBottom;
-            triangle.setX(result - (triangleWidth/2));
-        } else if (this.tooltipAlignment == TARGET_BOTTOM){
-            triangle = tooltipBinding.triangleTop;
-            triangle.setX(result - (triangleWidth/2));
-        }
         tooltipBinding.getRoot().postInvalidate();
     }
 
