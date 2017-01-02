@@ -395,19 +395,18 @@ public class CoachMark {
     public static class Builder{
         private Activity activity;
         private View target;
+        private ArrayList<View> tooltipChilds;
         private int markerPadding;
         private OnClick onClickTarget;
-        private String title;
-        private String description;
-        private String actionName;
-        private OnClick onClickAction;
-        private boolean isTransparentBackground;
+        private boolean tooltipMatchWidth;
+        private float backgroundAlpha;
         private boolean dismissible;
         private boolean isCircleMark;
-        private int textColor;
-        private int tooltipBagroundColor;
+        private int tooltipMargin;
+        private int tooltipBackgroundColor;
         private int tooltipAlignment;
         private int pointerTooltipAlignment;
+        private int radius;
         private Runnable onDismissListener;
         private Animation tooltipShowAnimation;
         private Animation tooltipDismissAnimation;
@@ -416,11 +415,20 @@ public class CoachMark {
             void onClick(CoachMark coachMark);
         }
 
+        /**
+         * this constructor for initial default value
+         * @param activity for parent view
+         */
         public Builder(Activity activity) {
             this.activity = activity;
-            this.tooltipAlignment = CoachMark.ROOT_BOTTOM; // default
-            this.pointerTooltipAlignment = CoachMark.POINTER_MIDDLE; // default
+            this.tooltipChilds = new ArrayList<>();
+            this.tooltipAlignment = CoachMark.ROOT_BOTTOM;
             this.pointerTooltipAlignment = CoachMark.POINTER_MIDDLE;
+            this.tooltipMargin = 5;
+            this.markerPadding = 0;
+            this.radius = 5;
+            this.backgroundAlpha = 0.5f;
+            this.tooltipMatchWidth = true;
         }
 
         @Nullable
@@ -450,11 +458,6 @@ public class CoachMark {
             return this;
         }
 
-        public Builder setTransparentBackground(){
-            this.isTransparentBackground = true;
-            return this;
-        }
-
         public Builder setOnClickTarget(OnClick onClickTarget){
             this.onClickTarget = onClickTarget;
             return this;
@@ -465,36 +468,45 @@ public class CoachMark {
             return this;
         }
 
-        public Builder setTitle(String title){
-            this.title = title;
-            return this;
-        }
-
-        public Builder setDescription(String description){
-            this.description = description;
-        public Builder setTooltipPointer(@PointerTooltipAlignment int pointerTooltipAlignment) {
-            this.pointerTooltipAlignment = pointerTooltipAlignment;
-            return this;
-        }
-
-        public Builder setAction(String actionName, OnClick onClickAction){
-            this.actionName = actionName;
-            this.onClickAction = onClickAction;
-            return this;
-        }
-
         public Builder setTooltipAlignment(@TooltipAlignment int tooltipAlignment) {
             this.tooltipAlignment = tooltipAlignment;
             return this;
         }
 
-        public Builder setPointerTooltipAlignment(@PointerTooltipAlignment int pointerTooltipAlignment) {
+        public Builder setTooltipPointer(@PointerTooltipAlignment int pointerTooltipAlignment) {
             this.pointerTooltipAlignment = pointerTooltipAlignment;
             return this;
         }
 
+
         public Builder setTooltipBackgroundColor(int colorResource) {
-            this.tooltipBagroundColor = colorResource;
+            this.tooltipBackgroundColor = colorResource;
+            return this;
+        }
+
+        public Builder setTooltipMatchWidth(boolean matchWidthTooltip) {
+            this.tooltipMatchWidth = matchWidthTooltip;
+            return this;
+        }
+
+        public Builder setTooltipChilds(ArrayList<View> tooltipChilds) {
+            this.tooltipChilds = tooltipChilds;
+            return this;
+        }
+
+        public Builder setTooltipMargin(int dp) {
+            this.tooltipMargin = dp;
+            return this;
+        }
+
+        public Builder addTooltipChild(View tooltipChild) {
+            if (this.tooltipChilds==null) {
+                this.tooltipChilds = new ArrayList<>();
+            }
+            this.tooltipChilds.add(tooltipChild);
+            return this;
+        }
+
         public Builder setOnDismissListener(Runnable onDismiss) {
             this.onDismissListener = onDismiss;
             return this;
@@ -510,13 +522,13 @@ public class CoachMark {
             return this;
         }
 
-        public Builder setTextColor(int colorResource) {
-            this.textColor = colorResource;
+        public Builder setBackgroundAlpha(float backgroundAlpha) {
+            this.backgroundAlpha = backgroundAlpha;
             return this;
         }
 
-        public Builder setOnClickAction(OnClick onClickAction) {
-            this.onClickAction = onClickAction;
+        public Builder setRadius(int radius) {
+            this.radius = radius;
             return this;
         }
 
