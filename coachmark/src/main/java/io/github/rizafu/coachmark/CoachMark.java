@@ -40,7 +40,6 @@ public class CoachMark {
     private int backgroundColorResource;
     private boolean dismissible;
     private boolean isCircleMark;
-    private Builder builder;
     private boolean isShow;
     private WidgetCoachTooltipViewModel tooltipViewModel;
     private WidgetCoachTooltipBinding tooltipBinding;
@@ -72,7 +71,6 @@ public class CoachMark {
     public @interface PointerTooltipAlignment{}
 
     private CoachMark(final Builder builder) {
-        this.builder = builder;
         this.activity = builder.activity;
         this.container = new FrameLayout(activity);
         this.tooltipViewModel = new WidgetCoachTooltipViewModel();
@@ -85,11 +83,6 @@ public class CoachMark {
         this.overlayPadding = builder.markerPadding;
         this.dismissible = builder.dismissible;
         this.tooltipAlignment = builder.tooltipAlignment;
-        tooltipViewModel.title.set(builder.title);
-        tooltipViewModel.description.set(builder.description);
-        tooltipViewModel.actionName.set(builder.actionName);
-        tooltipViewModel.backgroundColor.set(builder.tooltipBagroundColor);
-        tooltipViewModel.textColorResource.set(builder.textColor);
         this.onDismissListener = builder.onDismissListener;
         this.tooltipShowAnimation = builder.tooltipShowAnimation;
         this.tooltipDismissAnimation = builder.tooltipDismissAnimation;
@@ -117,11 +110,6 @@ public class CoachMark {
         ViewCompat.setAlpha(container,0f);
 
         addTarget();
-        setTooltipAlignment(tooltipAlignment, builder.pointerTooltipAlignment);
-    }
-
-    private void setAcitonClick(View.OnClickListener acitonClick){
-        tooltipViewModel.actionClick = acitonClick;
     }
 
     private void setTargetOnClick(View.OnClickListener targetOnClick) {
