@@ -227,15 +227,16 @@ public class CoachMark {
                 final int x = rect.left;
                 final int width = rect.width();
                 final int centerXTarget = x + (width/2);
+                final int margin = ViewUtils.dpToPx(4);
 
                 result = centerXTarget - (tooltipBinding.tooltip.getWidth()/2);
 
                 final float rTooltip = result + tooltipBinding.tooltip.getWidth();
                 if (rTooltip > getScreenWidth()){
-                    result = result - (rTooltip - getScreenWidth());
+                    result = (result - (rTooltip - getScreenWidth())) - margin;
                 }
-                if (result <0){
-                    result = 0;
+                if (result <=0){
+                    result = margin;
                 }
                 tooltipBinding.tooltip.setX(result);
             }
