@@ -58,10 +58,11 @@ public class CoachMark {
 
     public static final int ROOT_TOP = 1;
     public static final int ROOT_BOTTOM = 2;
-    public static final int TARGET_TOP = 3;
-    public static final int TARGET_BOTTOM = 4;
+    public static final int ROOT_CENTER = 3;
+    public static final int TARGET_TOP = 4;
+    public static final int TARGET_BOTTOM = 5;
 
-    @IntDef({ROOT_TOP,ROOT_BOTTOM,TARGET_TOP,TARGET_BOTTOM})
+    @IntDef({ROOT_TOP,ROOT_CENTER,ROOT_BOTTOM,TARGET_TOP,TARGET_BOTTOM})
     @Retention(RetentionPolicy.SOURCE)
     public @interface TooltipAlignment {}
 
@@ -238,14 +239,22 @@ public class CoachMark {
                 if (result <=0){
                     result = margin;
                 }
-                tooltipBinding.tooltip.setX(result);
+
+                if (tooltipAlignment == ROOT_CENTER || tooltipAlignment == ROOT_TOP || tooltipAlignment == ROOT_BOTTOM){
+                    result = (getScreenWidth()/2) - (tooltipBinding.tooltip.getWidth()/2);
+                    tooltipBinding.tooltip.setX(result);
+                } else {
+                    tooltipBinding.tooltip.setX(result);
+                }
             }
         }
 
         if (alignment == ROOT_TOP){
-            tooltipView.setY(0);
+            tooltipView.setY(getStatusBarHeight());
         } else if (alignment == ROOT_BOTTOM){
             tooltipView.setY(getScreenHeight() - tooltipHeight);
+        } else if (alignment == ROOT_CENTER){
+            tooltipView.setY((getScreenHeight()/2) - tooltipHeight + getStatusBarHeight());
         }
         tooltipView.postInvalidate();
     }
@@ -261,7 +270,7 @@ public class CoachMark {
         final int triangleWidth = ViewUtils.dpToPx(24);
         int result = 0;
 
-        if (pointerTooltipAlignment != POINTER_GONE) {
+        if (pointerTooltipAlignment != POINTER_GONE && tooltipAlignment != ROOT_CENTER && tooltipAlignment != ROOT_BOTTOM && tooltipAlignment != ROOT_TOP) {
             if (pointerTooltipAlignment == POINTER_LEFT){
                 result = x + margin;
             } else if (pointerTooltipAlignment == POINTER_MIDDLE){
