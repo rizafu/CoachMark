@@ -254,7 +254,7 @@ public class CoachMark {
         } else if (alignment == ROOT_BOTTOM){
             tooltipView.setY(getScreenHeight() - tooltipHeight);
         } else if (alignment == ROOT_CENTER){
-            tooltipView.setY((getScreenHeight()/2) - tooltipHeight + getStatusBarHeight());
+            tooltipView.setY(((getScreenHeight()/2) - (tooltipHeight/2)) + (getStatusBarHeight()/2));
         }
         tooltipView.postInvalidate();
     }
