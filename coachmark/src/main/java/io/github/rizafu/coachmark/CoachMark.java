@@ -553,8 +553,8 @@ public class CoachMark {
             return this;
         }
 
-        public Builder setTooltipMatchWidth(boolean matchWidthTooltip) {
-            this.tooltipMatchWidth = matchWidthTooltip;
+        public Builder setTooltipMatchWidth() {
+            this.tooltipMatchWidth = true;
             return this;
         }
 
