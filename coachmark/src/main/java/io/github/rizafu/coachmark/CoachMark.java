@@ -61,8 +61,12 @@ public class CoachMark {
     public static final int ROOT_CENTER = 3;
     public static final int TARGET_TOP = 4;
     public static final int TARGET_BOTTOM = 5;
+    public static final int TARGET_TOP_LEFT = 6;
+    public static final int TARGET_BOTTOM_LEFT = 7;
+    public static final int TARGET_TOP_RIGHT = 8;
+    public static final int TARGET_BOTTOM_RIGHT = 9;
 
-    @IntDef({ROOT_TOP,ROOT_CENTER,ROOT_BOTTOM,TARGET_TOP,TARGET_BOTTOM})
+    @IntDef({ROOT_TOP,ROOT_CENTER,ROOT_BOTTOM,TARGET_TOP,TARGET_BOTTOM,TARGET_TOP_LEFT,TARGET_BOTTOM_LEFT,TARGET_TOP_RIGHT,TARGET_BOTTOM_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface TooltipAlignment {}
 
@@ -213,11 +217,11 @@ public class CoachMark {
             final int height = rect.height();
             float result;
             // setY
-            if (alignment == TARGET_BOTTOM) {
+            if (alignment == TARGET_BOTTOM || alignment == TARGET_BOTTOM_LEFT || alignment == TARGET_BOTTOM_RIGHT) {
                 result = y + height + padding;
                 result = (float) (result + (isCircleMark? tooltipMargin * CIRCLE_ADDITIONAL_RADIUS_RATIO : 0));
                 tooltipView.setY(result);
-            } else if (alignment == TARGET_TOP){
+            } else if (alignment == TARGET_TOP || alignment == TARGET_TOP_LEFT || alignment == TARGET_TOP_RIGHT){
                 result = y - tooltipHeight - padding - triangleHeight;
                 result = (float) (result - (isCircleMark? tooltipMargin * CIRCLE_ADDITIONAL_RADIUS_RATIO : 0));
                 tooltipView.setY(result);
@@ -228,9 +232,16 @@ public class CoachMark {
                 final int x = rect.left;
                 final int width = rect.width();
                 final int centerXTarget = x + (width/2);
+                final int rightXTarget = x + (width);
                 final int margin = ViewUtils.dpToPx(4);
 
-                result = centerXTarget - (tooltipBinding.tooltip.getWidth()/2);
+                if (alignment == TARGET_BOTTOM_RIGHT || alignment == TARGET_TOP_RIGHT) {
+                    result = rightXTarget - tooltipBinding.tooltip.getWidth();
+                } else if (alignment == TARGET_BOTTOM_LEFT || alignment == TARGET_TOP_LEFT){
+                    result = x;
+                } else {
+                    result = centerXTarget - (tooltipBinding.tooltip.getWidth()/2);
+                }
 
                 final float rTooltip = result + tooltipBinding.tooltip.getWidth();
                 if (rTooltip > getScreenWidth()){
@@ -264,22 +275,26 @@ public class CoachMark {
         Rect rect = new Rect();
         view.getGlobalVisibleRect(rect);
 
+        View tooltipView = tooltipBinding.tooltip;
+
         final int x = rect.left;
         final int width = rect.width();
         final int margin = overlayPadding + ViewUtils.dpToPx(16);
         final int triangleWidth = ViewUtils.dpToPx(24);
+        final int tooltipWidth = tooltipView.getWidth();
+        final float tooltipX = tooltipView.getX();
         int result = 0;
 
         if (pointerTooltipAlignment != POINTER_GONE && tooltipAlignment != ROOT_CENTER && tooltipAlignment != ROOT_BOTTOM && tooltipAlignment != ROOT_TOP) {
             if (pointerTooltipAlignment == POINTER_LEFT){
-                result = x + margin;
+                result = tooltipViewModel.matchWidth.get() ? x + margin : (int) (tooltipX + margin);
             } else if (pointerTooltipAlignment == POINTER_MIDDLE){
-                result = x + (width/2);
+                result = tooltipViewModel.matchWidth.get() ? x + (width/2) : (int) (tooltipX + (tooltipWidth / 2));
             } else if (pointerTooltipAlignment == POINTER_RIGHT){
-                result = x + (width-margin);
+                result = tooltipViewModel.matchWidth.get() ? x + (width-margin) : (int) (tooltipX + tooltipWidth - margin);
             }
 
-            View triangle = this.tooltipAlignment == TARGET_TOP ? tooltipBinding.triangleBottom : tooltipBinding.triangleTop;
+            View triangle = this.tooltipAlignment == TARGET_TOP || this.tooltipAlignment == TARGET_TOP_LEFT || this.tooltipAlignment == TARGET_TOP_RIGHT ? tooltipBinding.triangleBottom : tooltipBinding.triangleTop;
             triangle.setVisibility(View.VISIBLE);
             triangle.setX(result - (triangleWidth/2));
         } else {
