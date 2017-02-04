@@ -3,12 +3,15 @@ package io.github.rizafu.coachmark;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.widget.CardView;
@@ -19,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -570,6 +574,16 @@ public class CoachMark {
             }
             this.tooltipChilds.add(tooltipChild);
             return this;
+        }
+
+        public Builder addTooltipChildText(Context context, String message, @ColorRes int textColor){
+            int padding = ViewUtils.dpToPx(8);
+            TextView textView = new TextView(context);
+            textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setTextColor(ContextCompat.getColor(context,textColor));
+            textView.setText(message);
+            textView.setPadding(padding,padding,padding,padding);
+            return addTooltipChild(textView);
         }
 
         public Builder setOnDismissListener(Runnable onDismiss) {
