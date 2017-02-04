@@ -342,7 +342,13 @@ public class CoachMark {
         ViewCompat.setTranslationY(clickableView, y);
         ViewCompat.setTranslationX(clickableView, x);
         clickableView.setOnClickListener(targetOnClick);
-        clickableView.setBackgroundColor(Color.TRANSPARENT);
+
+        int[] attrs = new int[]{R.attr.selectableItemBackground};
+        TypedArray typedArray = view.getContext().obtainStyledAttributes(attrs);
+        int backgroundResource = typedArray.getResourceId(0, 0);
+        clickableView.setBackgroundResource(backgroundResource);
+        typedArray.recycle();
+
         container.addView(clickableView);
         container.invalidate();
     }
