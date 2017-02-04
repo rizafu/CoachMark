@@ -86,7 +86,7 @@ public class CoachMark {
         this.tooltipBinding = DataBindingUtil.inflate(activity.getLayoutInflater(),R.layout.widget_coach_tooltip,container,false);
         this.tooltipBinding.setViewModel(this.tooltipViewModel);
 
-        this.backgroundColorResource = android.R.color.black;
+        this.backgroundColorResource = builder.backgroundColor;
         this.isCircleMark = builder.isCircleMark;
         this.targetView = builder.target;
         this.overlayPadding = ViewUtils.dpToPx(builder.markerPadding);
@@ -463,6 +463,7 @@ public class CoachMark {
         private OnClick onClickTarget;
         private boolean tooltipMatchWidth;
         private float backgroundAlpha;
+        private int backgroundColor;
         private boolean dismissible;
         private boolean isCircleMark;
         private int tooltipMargin;
@@ -491,7 +492,8 @@ public class CoachMark {
             this.markerPadding = 0;
             this.radius = 5;
             this.backgroundAlpha = 0.5f;
-            this.tooltipMatchWidth = true;
+            this.backgroundColor = android.R.color.black;
+            this.tooltipMatchWidth = false;
         }
 
         @Nullable
@@ -587,6 +589,11 @@ public class CoachMark {
 
         public Builder setBackgroundAlpha(float backgroundAlpha) {
             this.backgroundAlpha = backgroundAlpha;
+            return this;
+        }
+
+        public Builder setBackgroundColor(@ColorRes int backgroundColor) {
+            this.backgroundColor = backgroundColor;
             return this;
         }
 
