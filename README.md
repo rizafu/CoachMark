@@ -1,4 +1,4 @@
-# Android-Coach-Mark
+# Coach Mark Android
 An android library coaching mark for target todo or explain a page, with simple UI and easy to use
 
 License
