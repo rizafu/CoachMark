@@ -8,7 +8,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="io.github.rizafu.coachmark.WidgetCoachTooltipViewModel"/>
+            type="com.rizafu.coachmark.WidgetCoachTooltipViewModel"/>
     </data>
 
     <LinearLayout

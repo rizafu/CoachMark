@@ -12,11 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.rizafu.coachmark.CoachMark;
+import com.rizafu.sample.databinding.AboutTooltipBinding;
+import com.rizafu.sample.databinding.ActivityMainBinding;
 
-import io.github.rizafu.coachmark.BuildConfig;
-import io.github.rizafu.sample.R;
-import io.github.rizafu.sample.databinding.AboutTooltipBinding;
-import io.github.rizafu.sample.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements MainAdapter.OnItemClick {
 

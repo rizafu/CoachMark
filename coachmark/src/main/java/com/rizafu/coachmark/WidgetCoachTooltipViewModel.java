@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-import io.github.rizafu.coachmark.R;
+
 
 /**
  * Created by RizaFu on 11/9/16.

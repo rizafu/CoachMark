@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rizafu.sample.databinding.ItemMainBinding;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import io.github.rizafu.sample.R;
-import io.github.rizafu.sample.databinding.ItemMainBinding;
 
 /**
  * Created by RizaFu on 1/2/17.

@@ -24,12 +24,12 @@ import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.rizafu.coachmark.databinding.WidgetCoachTooltipBinding;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
-import io.github.rizafu.coachmark.R;
-import io.github.rizafu.coachmark.databinding.WidgetCoachTooltipBinding;
 
 /**
  * Created by RizaFu on 11/7/16.
