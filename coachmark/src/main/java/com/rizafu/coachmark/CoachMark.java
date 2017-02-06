@@ -1,4 +1,4 @@
-package io.github.rizafu.coachmark;
+package com.rizafu.coachmark;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +28,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
+import io.github.rizafu.coachmark.R;
 import io.github.rizafu.coachmark.databinding.WidgetCoachTooltipBinding;
 
 /**
@@ -87,7 +88,7 @@ public class CoachMark {
         this.activity = builder.activity;
         this.container = new FrameLayout(activity);
         this.tooltipViewModel = new WidgetCoachTooltipViewModel();
-        this.tooltipBinding = DataBindingUtil.inflate(activity.getLayoutInflater(),R.layout.widget_coach_tooltip,container,false);
+        this.tooltipBinding = DataBindingUtil.inflate(activity.getLayoutInflater(), R.layout.widget_coach_tooltip,container,false);
         this.tooltipBinding.setViewModel(this.tooltipViewModel);
 
         this.backgroundColorResource = builder.backgroundColor;

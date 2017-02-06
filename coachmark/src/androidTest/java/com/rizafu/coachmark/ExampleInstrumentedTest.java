@@ -1,4 +1,4 @@
-package io.github.rizafu.coachmark;
+package com.rizafu.coachmark;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

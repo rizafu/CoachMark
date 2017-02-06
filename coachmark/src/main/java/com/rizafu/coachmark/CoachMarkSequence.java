@@ -1,4 +1,4 @@
-package io.github.rizafu.coachmark;
+package com.rizafu.coachmark;
 
 import java.util.Collections;
 import java.util.LinkedList;

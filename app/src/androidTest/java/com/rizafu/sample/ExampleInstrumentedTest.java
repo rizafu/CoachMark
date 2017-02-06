@@ -1,4 +1,4 @@
-package io.github.rizafu.sample;
+package com.rizafu.sample;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

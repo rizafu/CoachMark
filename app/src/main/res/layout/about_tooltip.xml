@@ -27,6 +27,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center"
+                android:linksClickable="true"
+                android:autoLink="web"
+                android:textColorLink="@android:color/white"
                 android:textColor="@android:color/white"
                 android:gravity="center" />
 

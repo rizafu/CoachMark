@@ -1,5 +1,6 @@
-package io.github.rizafu.sample;
+package com.rizafu.sample;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.github.rizafu.sample.R;
 import io.github.rizafu.sample.databinding.ItemMainBinding;
 
 /**
@@ -21,6 +23,7 @@ class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
     private static final String TITLE = "title";
     private static final String SUBTITLE = "subTitle";
     private ArrayList<HashMap<String,String>> items;
+    private Context context;
 
     public MainAdapter() {
         this.items = new ArrayList<>();
@@ -46,7 +49,8 @@ class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
 
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ItemMainBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.item_main,parent,false);
+        context = parent.getContext();
+        ItemMainBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_main,parent,false);
         return new MainViewHolder(binding);
     }
 
@@ -66,6 +70,12 @@ class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
             holder.getBinding().subTitle.setVisibility(View.VISIBLE);
         } else {
             holder.getBinding().subTitle.setVisibility(View.GONE);
+        }
+        if (position == getItemCount()-1){
+            int margin = (int) context.getResources().getDimension(R.dimen.margin_item);
+            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(margin,margin,margin,margin);
+            holder.getBinding().container.setLayoutParams(params);
         }
     }
 
