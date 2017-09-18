@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rizafu.coachmark.databinding.WidgetCoachTooltipBinding;
@@ -70,8 +71,9 @@ public class CoachMark {
     public static final int TARGET_BOTTOM_LEFT = 7;
     public static final int TARGET_TOP_RIGHT = 8;
     public static final int TARGET_BOTTOM_RIGHT = 9;
+    public static final int TARGET_FILL_IN = 10;
 
-    @IntDef({ROOT_TOP,ROOT_CENTER,ROOT_BOTTOM,TARGET_TOP,TARGET_BOTTOM,TARGET_TOP_LEFT,TARGET_BOTTOM_LEFT,TARGET_TOP_RIGHT,TARGET_BOTTOM_RIGHT})
+    @IntDef({ROOT_TOP,ROOT_CENTER,ROOT_BOTTOM,TARGET_TOP,TARGET_BOTTOM,TARGET_TOP_LEFT,TARGET_BOTTOM_LEFT,TARGET_TOP_RIGHT,TARGET_BOTTOM_RIGHT, TARGET_FILL_IN})
     @Retention(RetentionPolicy.SOURCE)
     public @interface TooltipAlignment {}
 
@@ -218,8 +220,20 @@ public class CoachMark {
             Rect rect = new Rect();
             view.getGlobalVisibleRect(rect);
 
-            final int y = rect.top;
             final int height = rect.height();
+            final int width = rect.width();
+
+            if (alignment == TARGET_FILL_IN) {
+                int x = rect.left - (width - rect.width()) / 2;
+                int y = rect.top - (height - rect.height()) / 2;
+                tooltipView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
+                tooltipView.setY(y);
+                tooltipView.setX(x);
+                tooltipBinding.tooltip.setLayoutParams(new LinearLayout.LayoutParams(width,height));
+                tooltipView.setOnClickListener(targetOnClick);
+            }
+
+            final int y = rect.top;
             float result;
             // setY
             if (alignment == TARGET_BOTTOM || alignment == TARGET_BOTTOM_LEFT || alignment == TARGET_BOTTOM_RIGHT) {
@@ -235,7 +249,6 @@ public class CoachMark {
             // setX
             if (!tooltipViewModel.matchWidth.get()) {
                 final int x = rect.left;
-                final int width = rect.width();
                 final int centerXTarget = x + (width/2);
                 final int rightXTarget = x + (width);
                 final int margin = ViewUtils.dpToPx(4);
