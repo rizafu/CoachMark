@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/rizafu/CoachMark'
     gitUrl = 'https://github.com/rizafu/CoachMark.git'
 
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
     developerId = 'rizafu'
     developerName = 'Riza Fathul Uzzy'
