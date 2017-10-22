@@ -20,9 +20,9 @@ import com.rizafu.sample.databinding.RecyclerLayoutBinding
 class SimpleFragment : Fragment(){
     private lateinit var binding: RecyclerLayoutBinding
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater!!, R.layout.recycler_layout, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.recycler_layout, container, false)
         return binding.root
     }
 

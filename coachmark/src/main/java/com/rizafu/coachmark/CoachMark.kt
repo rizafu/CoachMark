@@ -177,9 +177,9 @@ class CoachMark private constructor(builder: Builder) {
         }
     }
 
-    private fun addRoundRect(view: View?) {
+    private fun addRoundRect(view: View) {
         val rect = Rect()
-        view!!.getGlobalVisibleRect(rect)
+        view.getGlobalVisibleRect(rect)
         val radius = this.radius
 
         val x = rect.left
@@ -193,9 +193,9 @@ class CoachMark private constructor(builder: Builder) {
         coachMarkOverlay.postInvalidate()
     }
 
-    private fun addCircleRect(view: View?) {
+    private fun addCircleRect(view: View) {
         val rect = Rect()
-        view!!.getGlobalVisibleRect(rect)
+        view.getGlobalVisibleRect(rect)
         val cx = rect.centerX()
         val cy = rect.centerY()
 
@@ -413,7 +413,7 @@ class CoachMark private constructor(builder: Builder) {
                     override fun onAnimationEnd(view: View?) {
                         super.onAnimationEnd(view)
                         if (container.alpha == 0f) {
-                            val parent = view!!.parent
+                            val parent = view?.parent
                             (parent as? ViewGroup)?.removeView(view)
                             isShow = false
                             afterDestroy?.run()
