@@ -1,8 +1,12 @@
+[ ![Download](https://api.bintray.com/packages/rizafu/maven/CoachMark/images/download.svg) ](https://bintray.com/rizafu/maven/CoachMark/_latestVersion)
+
 # Coach Mark Android
 An android library coaching mark for target todo or explain a page, with simple UI and easy to use
 
 # Recuired dependency
+Make sure your app implement recuired dependency
 - Android Data Binding
+- Kotlin
 
 License
 --------
