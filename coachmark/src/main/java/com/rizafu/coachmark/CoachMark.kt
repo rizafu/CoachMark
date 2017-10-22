@@ -180,7 +180,7 @@ class CoachMark private constructor(builder: Builder) {
     private fun addRoundRect(view: View?) {
         val rect = Rect()
         view!!.getGlobalVisibleRect(rect)
-        var radius = this.radius
+        val radius = this.radius
 
         val x = rect.left
         val y = rect.top
