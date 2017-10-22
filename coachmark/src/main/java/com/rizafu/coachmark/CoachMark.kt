@@ -11,7 +11,6 @@ import android.support.annotation.IntDef
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter
-import android.support.v7.widget.CardView
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -182,10 +181,6 @@ class CoachMark private constructor(builder: Builder) {
         val rect = Rect()
         view!!.getGlobalVisibleRect(rect)
         var radius = this.radius
-        if (view is CardView) {
-            val cardView = view as CardView?
-            radius = cardView!!.radius.toInt()
-        }
 
         val x = rect.left
         val y = rect.top
