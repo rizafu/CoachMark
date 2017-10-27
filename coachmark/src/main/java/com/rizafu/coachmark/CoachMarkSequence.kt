@@ -14,18 +14,10 @@ class CoachMarkSequence {
     private var coachMark: CoachMark? = null
     private var started: Boolean = false
 
-    private var onSequenceFinish: OnSequenceFinish? = null
-    private var onSequenceShowNext: OnSequenceShowNext? = null
+    private var onSequenceFinish: (() -> Unit)? = null
+    private var onSequenceShowNext: ((CoachMarkSequence, CoachMark?) -> Unit)? = null
 
-    private val onClick: (CoachMark) -> Unit = { coachMark -> coachMark.destroy(Runnable{ next() }) }
-
-    interface OnSequenceFinish {
-        fun onSequenceFinish()
-    }
-
-    interface OnSequenceShowNext {
-        fun onSequenceShowNext(coachMarkSequence: CoachMarkSequence, coachMark: CoachMark?)
-    }
+    private val onClick: (CoachMark) -> Unit = { coachMark -> coachMark.destroy{ next() }}
 
     fun setCoachMarks(vararg coachMarks: CoachMark.Builder): CoachMarkSequence {
         Collections.addAll<CoachMark.Builder>(this.coachMarks, *coachMarks)
@@ -42,12 +34,12 @@ class CoachMarkSequence {
         return this
     }
 
-    fun setOnSequenceFinish(OnSequenceFinish: OnSequenceFinish): CoachMarkSequence {
-        this.onSequenceFinish = OnSequenceFinish
+    fun setOnSequenceFinish(onSequenceFinish: () -> Unit): CoachMarkSequence {
+        this.onSequenceFinish = onSequenceFinish
         return this
     }
 
-    fun setOnSequenceShowNext(onSequenceShowNext: OnSequenceShowNext): CoachMarkSequence {
+    fun setOnSequenceShowNext(onSequenceShowNext: (CoachMarkSequence, CoachMark?) -> Unit): CoachMarkSequence {
         this.onSequenceShowNext = onSequenceShowNext
         return this
     }
@@ -60,15 +52,15 @@ class CoachMarkSequence {
     }
 
     fun showNext() {
-        coachMark?.destroy(Runnable { next() })
+        coachMark?.destroy { next() }
     }
 
     private operator fun next() {
         try {
             coachMark = coachMarks.remove().setOnClickTarget(onClick).show()
-            onSequenceShowNext?.onSequenceShowNext(this, coachMark)
+            onSequenceShowNext?.invoke(this, coachMark)
         } catch (e: NoSuchElementException) {
-            onSequenceFinish?.onSequenceFinish()
+            onSequenceFinish?.invoke()
         }
 
     }

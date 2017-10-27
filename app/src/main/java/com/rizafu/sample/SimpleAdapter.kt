@@ -32,10 +32,6 @@ internal class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.MainViewHolder
         notifyDataSetChanged()
     }
 
-    interface OnItemClick {
-        fun onClick(view: View, position: Int)
-    }
-
     fun setOnItemClick(onItemClick: (View, Int) -> Unit) {
         this.onItemClick = onItemClick
     }

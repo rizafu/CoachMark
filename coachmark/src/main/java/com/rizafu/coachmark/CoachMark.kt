@@ -47,7 +47,7 @@ class CoachMark private constructor(builder: Builder) {
     private lateinit var coachMarkOverlay: CoachMarkOverlay
     private val targetView: View?
     private var targetOnClick: View.OnClickListener? = null
-    private val onDismissListener: Runnable?
+    private val onDismissListener: (() -> Unit)?
     private val tooltipShowAnimation: Animation?
     private val tooltipDismissAnimation: Animation?
 
@@ -384,8 +384,8 @@ class CoachMark private constructor(builder: Builder) {
     }
 
     @JvmOverloads
-    fun dismiss(afterDismiss: Runnable? = null) {
-        onDismissListener?.run()
+    fun dismiss(afterDismiss: (() -> Unit)? = null) {
+        onDismissListener?.invoke()
         animateTooltipDismiss()
         ViewCompat.animate(container)
                 .alpha(0f)
@@ -396,15 +396,15 @@ class CoachMark private constructor(builder: Builder) {
                         if (container.alpha == 0f) {
                             container.visibility = View.GONE
                             isShow = false
-                            afterDismiss?.run()
+                            afterDismiss?.invoke()
                         }
                     }
                 }).start()
     }
 
     @JvmOverloads
-    fun destroy(afterDestroy: Runnable? = null) {
-        onDismissListener?.run()
+    fun destroy(afterDestroy: (() -> Unit)? = null) {
+        onDismissListener?.invoke()
         animateTooltipDismiss()
         ViewCompat.animate(container)
                 .alpha(0f)
@@ -416,7 +416,7 @@ class CoachMark private constructor(builder: Builder) {
                             val parent = view?.parent
                             (parent as? ViewGroup)?.removeView(view)
                             isShow = false
-                            afterDestroy?.run()
+                            afterDestroy?.invoke()
                         }
                     }
                 }).start()
@@ -441,7 +441,7 @@ class CoachMark private constructor(builder: Builder) {
         internal var tooltipAlignment: Long = CoachMark.ROOT_BOTTOM
         internal var pointerTooltipAlignment: Long = CoachMark.POINTER_MIDDLE
         internal var radius: Int = 5
-        internal var onDismissListener: Runnable? = null
+        internal var onDismissListener: (() -> Unit)? = null
         internal var tooltipShowAnimation: Animation? = null
         internal var tooltipDismissAnimation: Animation? = null
 
@@ -527,7 +527,7 @@ class CoachMark private constructor(builder: Builder) {
             return addTooltipChild(textView)
         }
 
-        fun setOnDismissListener(onDismiss: Runnable): Builder {
+        fun setOnDismissListener(onDismiss: () -> Unit): Builder {
             this.onDismissListener = onDismiss
             return this
         }

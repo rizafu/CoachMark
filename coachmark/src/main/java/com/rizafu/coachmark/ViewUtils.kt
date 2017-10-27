@@ -18,12 +18,12 @@ internal object ViewUtils {
         return (dp * Resources.getSystem().displayMetrics.density).toInt()
     }
 
-    fun doAfterLayout(view: View, runnable: Runnable) {
+    fun doAfterLayout(view: View, listen: () -> Unit) {
         val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val viewTreeObserver = view.viewTreeObserver
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
-                runnable.run()
+                listen.invoke()
             }
         }
         view.viewTreeObserver.addOnGlobalLayoutListener(listener)
