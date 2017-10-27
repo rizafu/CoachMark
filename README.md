@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/rizafu/maven/CoachMark/images/download.svg) ](https://bintray.com/rizafu/maven/CoachMark/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/rizafu/maven/CoachMark/images/download.svg) ](https://bintray.com/rizafu/maven/CoachMark/_latestVersion) [![codebeat badge](https://codebeat.co/badges/fbc1c22d-c351-4e31-93b4-a71cc6ef1407)](https://codebeat.co/projects/github-com-rizafu-coachmark-master)
 
 # Coach Mark Android
 An android library coaching mark for target todo or explain a page, with simple UI and easy to use
