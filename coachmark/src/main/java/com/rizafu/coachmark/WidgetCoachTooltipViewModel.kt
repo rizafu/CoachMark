@@ -43,11 +43,11 @@ class WidgetCoachTooltipViewModel {
                 } else {// for rounded corner
                     val drawable = ContextCompat.getDrawable(layout.context, R.drawable.shp_card)
                     if (it == 0 || it < 0) {
-                        drawable.setColorFilter(ContextCompat.getColor(layout.context, android.R.color.white), PorterDuff.Mode.MULTIPLY)
+                        drawable?.setColorFilter(ContextCompat.getColor(layout.context, android.R.color.white), PorterDuff.Mode.MULTIPLY)
                     } else {
-                        drawable.setColorFilter(ContextCompat.getColor(layout.context, it), PorterDuff.Mode.MULTIPLY)
+                        drawable?.setColorFilter(ContextCompat.getColor(layout.context, it), PorterDuff.Mode.MULTIPLY)
                     }
-                    layout.background = drawable
+                    drawable?.let { layout.background = it }
                 }
             }
 

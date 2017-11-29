@@ -26,7 +26,7 @@ class SimpleFragment : Fragment(){
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = SimpleAdapter()
         adapter.addItem("Simple Coach Mark 1", "no tooltip, click target for dismiss")
@@ -55,53 +55,56 @@ class SimpleFragment : Fragment(){
     }
 
     private fun onClick(view: View, position: Int) {
-        when (position) {
-            0 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .show()
-            1 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .setDismissible()
-                    .show()
-            2 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .setOnClickTarget { coachMark ->
-                        coachMark.destroy()
-                        Snackbar.make(view.rootView, "Action click on target mark", BaseTransientBottomBar.LENGTH_LONG).show()
-                    }
-                    .show()
-            3 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .addTooltipChildText(context, "this is message tooltip", android.R.color.primary_text_dark)
-                    .setTooltipAlignment(CoachMark.TARGET_BOTTOM)
-                    .setTooltipBackgroundColor(R.color.colorPrimary)
-                    .show()
-            4 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .addTooltipChildText(context, "this is message tooltip", android.R.color.primary_text_light)
-                    .setTooltipAlignment(CoachMark.TARGET_TOP)
-                    .setTooltipBackgroundColor(R.color.colorAccent)
-                    .show()
-            5 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .addTooltipChildText(context, "this is message tooltip", android.R.color.primary_text_light)
-                    .setTooltipAlignment(CoachMark.TARGET_TOP_LEFT)
-                    .setTooltipPointer(CoachMark.POINTER_LEFT)
-                    .setTooltipBackgroundColor(R.color.colorAccent)
-                    .show()
-            6 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .addTooltipChildText(context, "this is message tooltip", android.R.color.primary_text_light)
-                    .setTooltipAlignment(CoachMark.TARGET_TOP_RIGHT)
-                    .setTooltipPointer(CoachMark.POINTER_RIGHT)
-                    .setTooltipBackgroundColor(R.color.colorAccent)
-                    .show()
-            7 -> CoachMark.Builder(activity)
-                    .setTarget(view)
-                    .addTooltipChildText(context, "this is message tooltip", android.R.color.primary_text_light)
-                    .setTooltipAlignment(CoachMark.TARGET_TOP)
-                    .setTooltipPointer(CoachMark.POINTER_GONE)
-                    .show()
+        activity?.let {
+            when (position) {
+                0 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .show()
+                1 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .setDismissible()
+                        .show()
+                2 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .setOnClickTarget { coachMark ->
+                            coachMark.destroy()
+                            Snackbar.make(view.rootView, "Action click on target mark", BaseTransientBottomBar.LENGTH_LONG).show()
+                        }
+                        .show()
+                3 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .addTooltipChildText(it, "this is message tooltip", android.R.color.primary_text_dark)
+                        .setTooltipAlignment(CoachMark.TARGET_BOTTOM)
+                        .setTooltipBackgroundColor(R.color.colorPrimary)
+                        .show()
+                4 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .addTooltipChildText(it, "this is message tooltip", android.R.color.primary_text_light)
+                        .setTooltipAlignment(CoachMark.TARGET_TOP)
+                        .setTooltipBackgroundColor(R.color.colorAccent)
+                        .show()
+                5 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .addTooltipChildText(it, "this is message tooltip", android.R.color.primary_text_light)
+                        .setTooltipAlignment(CoachMark.TARGET_TOP_LEFT)
+                        .setTooltipPointer(CoachMark.POINTER_LEFT)
+                        .setTooltipBackgroundColor(R.color.colorAccent)
+                        .show()
+                6 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .addTooltipChildText(it, "this is message tooltip", android.R.color.primary_text_light)
+                        .setTooltipAlignment(CoachMark.TARGET_TOP_RIGHT)
+                        .setTooltipPointer(CoachMark.POINTER_RIGHT)
+                        .setTooltipBackgroundColor(R.color.colorAccent)
+                        .show()
+                7 -> CoachMark.Builder(it)
+                        .setTarget(view)
+                        .addTooltipChildText(it, "this is message tooltip", android.R.color.primary_text_light)
+                        .setTooltipAlignment(CoachMark.TARGET_TOP)
+                        .setTooltipPointer(CoachMark.POINTER_GONE)
+                        .show()
+                else -> { }
+            }
         }
     }
 
