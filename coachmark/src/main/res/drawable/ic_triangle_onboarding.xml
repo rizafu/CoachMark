@@ -12,9 +12,8 @@
             android:translateY="208.000000">
             <path
                 android:fillColor="#000000"
-                android:fillType="evenOdd"
                 android:strokeWidth="1"
-                android:pathData="M 339.313708 9.23705556e-14 L 350.627417 11.3137085 L 328 11.3137085 Z" />
+                android:pathData="M 339.313708 0.0000000000000923705556 L 350.627417 11.3137085 L 328 11.3137085 Z" />
         </group>
     </group>
 </vector>
