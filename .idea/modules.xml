@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android-Coach-Mark.iml" filepath="$PROJECT_DIR$/Android-Coach-Mark.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CoachMark.iml" filepath="$PROJECT_DIR$/CoachMark.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/coachmark/coachmark.iml" filepath="$PROJECT_DIR$/coachmark/coachmark.iml" />
     </modules>
