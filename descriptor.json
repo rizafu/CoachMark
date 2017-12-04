@@ -1,0 +1,20 @@
+{
+  "package" : {
+    "name": "CoachMark",
+    "repo": "maven",
+    "subject": "rizafu",
+    "desc": "An android library coaching mark for target todo, showcase, tutorial, floating menu and explain a page with simple UI, customable and easy to use",
+    "website_url": "https://github.com/rizafu/CoachMark",
+    "issue_tracker_url": "https://github.com/rizafu/CoachMark/issues",
+    "vcs_url": "https://github.com/rizafu/CoachMark.git",
+    "licenses": ["Apache-2.0"]
+  },
+  "version" : {
+    "name": "1.1.3"
+  },
+  "files" : [
+    {"includePattern": "coachmark/build/libs/(.*)",
+      "uploadPattern" : "$1"}
+  ],
+  "publish" : true
+}
