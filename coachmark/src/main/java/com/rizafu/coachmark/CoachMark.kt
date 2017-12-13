@@ -82,7 +82,7 @@ class CoachMark private constructor(builder: Builder) {
             return result
         }
 
-    @IntDef(ROOT_TOP, ROOT_CENTER, ROOT_BOTTOM, TARGET_TOP, TARGET_BOTTOM, TARGET_TOP_LEFT, TARGET_BOTTOM_LEFT, TARGET_TOP_RIGHT, TARGET_BOTTOM_RIGHT, TARGET_FILL_IN)
+    @IntDef(ROOT_TOP, ROOT_CENTER, ROOT_BOTTOM, TARGET_TOP, TARGET_BOTTOM, TARGET_TOP_LEFT, TARGET_BOTTOM_LEFT, TARGET_TOP_RIGHT, TARGET_BOTTOM_RIGHT, TARGET_FILL_IN, TARGET_LEFT, TARGET_RIGHT)
     @Retention(AnnotationRetention.SOURCE)
     annotation class TooltipAlignment
 
@@ -213,6 +213,7 @@ class CoachMark private constructor(builder: Builder) {
         val tooltipHeight = tooltipView.height
         val padding = overlayPadding + tooltipMargin
         val triangleHeight = if (tooltipPointerAlignment != POINTER_GONE) ViewUtils.dpToPx(12) else ViewUtils.dpToPx(0)
+        val triangleWidth = if (tooltipPointerAlignment != POINTER_GONE) ViewUtils.dpToPx(12) else ViewUtils.dpToPx(0)
 
         if (view != null && !tooltipViewModel.isEmptyValue()) {
             val rect = Rect()
@@ -246,6 +247,9 @@ class CoachMark private constructor(builder: Builder) {
                     result -= (tooltipMargin * CIRCLE_ADDITIONAL_RADIUS_RATIO).toFloat()
                 }
                 tooltipView.y = result
+            } else if (!tooltipViewModel.matchWidth.get() && alignment == TARGET_LEFT || alignment == TARGET_RIGHT){
+                result = (y + (height/2) - (tooltipHeight/2)).toFloat()
+                tooltipView.y = result
             }
 
             // setX
@@ -259,6 +263,10 @@ class CoachMark private constructor(builder: Builder) {
                     (rightXTarget - tooltipBinding.tooltip.width).toFloat()
                 } else if (alignment == TARGET_BOTTOM_LEFT || alignment == TARGET_TOP_LEFT) {
                     x.toFloat()
+                } else if (alignment == TARGET_LEFT){
+                    (x - tooltipBinding.tooltip.width - margin - triangleWidth).toFloat()
+                } else if (alignment == TARGET_RIGHT){
+                    (rightXTarget + margin - triangleWidth).toFloat()
                 } else {
                     (centerXTarget - tooltipBinding.tooltip.width / 2).toFloat()
                 }
@@ -300,19 +308,37 @@ class CoachMark private constructor(builder: Builder) {
         val margin = overlayPadding + ViewUtils.dpToPx(16)
         val triangleWidth = ViewUtils.dpToPx(24)
         val tooltipWidth = tooltipView.width
+        val tooltipHeight = tooltipView.height
         val tooltipX = tooltipView.x
         var result = 0
 
-        if (pointerTooltipAlignment != POINTER_GONE && tooltipAlignment != ROOT_CENTER && tooltipAlignment != ROOT_BOTTOM && tooltipAlignment != ROOT_TOP) {
-            when (pointerTooltipAlignment) {
-                POINTER_LEFT -> result = if (tooltipViewModel.matchWidth.get()) x + margin else (tooltipX + margin).toInt()
-                POINTER_MIDDLE -> result = if (tooltipViewModel.matchWidth.get()) x + width / 2 else (tooltipX + tooltipWidth / 2).toInt()
-                POINTER_RIGHT -> result = if (tooltipViewModel.matchWidth.get()) x + (width - margin) else (tooltipX + tooltipWidth - margin).toInt()
-            }
+        if (pointerTooltipAlignment != POINTER_GONE){
+            if (this.tooltipAlignment == TARGET_RIGHT || this.tooltipAlignment == TARGET_LEFT) {
 
-            val triangle = if (this.tooltipAlignment == TARGET_TOP || this.tooltipAlignment == TARGET_TOP_LEFT || this.tooltipAlignment == TARGET_TOP_RIGHT) tooltipBinding.triangleBottom else tooltipBinding.triangleTop
-            triangle.visibility = View.VISIBLE
-            triangle.x = (result - triangleWidth / 2).toFloat()
+                tooltipBinding.container.orientation = LinearLayout.HORIZONTAL
+
+                val triangle = if (this.tooltipAlignment == TARGET_LEFT)tooltipBinding.triangleBottom else tooltipBinding.triangleTop
+                triangle.visibility = View.VISIBLE
+                triangle.y = (tooltipView.y + tooltipHeight/2 - ViewUtils.dpToPx(6))
+
+                if (this.tooltipAlignment == TARGET_RIGHT) {
+                    triangle.rotation = (-90).toFloat()
+                    triangle.x = tooltipX - triangleWidth / 2 + margin + ViewUtils.dpToPx(2)
+                } else {
+                    triangle.rotation = (90).toFloat()
+                    triangle.x = tooltipX - ViewUtils.dpToPx(7)
+                }
+            } else if (tooltipAlignment != ROOT_CENTER && tooltipAlignment != ROOT_BOTTOM && tooltipAlignment != ROOT_TOP) {
+                when (pointerTooltipAlignment) {
+                    POINTER_LEFT -> result = if (tooltipViewModel.matchWidth.get()) x + margin else (tooltipX + margin).toInt()
+                    POINTER_MIDDLE -> result = if (tooltipViewModel.matchWidth.get()) x + width / 2 else (tooltipX + tooltipWidth / 2).toInt()
+                    POINTER_RIGHT -> result = if (tooltipViewModel.matchWidth.get()) x + (width - margin) else (tooltipX + tooltipWidth - margin).toInt()
+                }
+
+                val triangle = if (this.tooltipAlignment == TARGET_TOP || this.tooltipAlignment == TARGET_TOP_LEFT || this.tooltipAlignment == TARGET_TOP_RIGHT) tooltipBinding.triangleBottom else tooltipBinding.triangleTop
+                triangle.visibility = View.VISIBLE
+                triangle.x = (result - triangleWidth / 2).toFloat()
+            }
         } else {
             tooltipBinding.triangleBottom.visibility = View.GONE
             tooltipBinding.triangleTop.visibility = View.GONE
@@ -586,6 +612,8 @@ class CoachMark private constructor(builder: Builder) {
         const val TARGET_TOP_RIGHT :Long = 8
         const val TARGET_BOTTOM_RIGHT :Long = 9
         const val TARGET_FILL_IN :Long = 10
+        const val TARGET_LEFT :Long = 11
+        const val TARGET_RIGHT :Long = 12
 
         const val POINTER_RIGHT :Long = 1
         const val POINTER_MIDDLE :Long = 2
