@@ -48,6 +48,7 @@ class CoachMark private constructor(builder: Builder) {
     private val targetView: View?
     private var targetOnClick: View.OnClickListener? = null
     private val onDismissListener: (() -> Unit)?
+    private val onAfterDismissListener: (() -> Unit)?
     private val tooltipShowAnimation: Animation?
     private val tooltipDismissAnimation: Animation?
 
@@ -106,6 +107,7 @@ class CoachMark private constructor(builder: Builder) {
         this.tooltipPointerAlignment = builder.pointerTooltipAlignment
         this.tooltipMargin = ViewUtils.dpToPx(builder.tooltipMargin)
         this.onDismissListener = builder.onDismissListener
+        this.onAfterDismissListener = builder.onAfterDismissListener
         this.tooltipShowAnimation = builder.tooltipShowAnimation
         this.tooltipDismissAnimation = builder.tooltipDismissAnimation
         this.radius = builder.radius
@@ -420,29 +422,11 @@ class CoachMark private constructor(builder: Builder) {
                     override fun onAnimationEnd(view: View?) {
                         super.onAnimationEnd(view)
                         if (container.alpha == 0f) {
-                            container.visibility = View.GONE
-                            isShow = false
-                            afterDismiss?.invoke()
-                        }
-                    }
-                }).start()
-    }
-
-    @JvmOverloads
-    fun destroy(afterDestroy: (() -> Unit)? = null) {
-        onDismissListener?.invoke()
-        animateTooltipDismiss()
-        ViewCompat.animate(container)
-                .alpha(0f)
-                .setDuration(animDuration.toLong())
-                .setListener(object : ViewPropertyAnimatorListenerAdapter() {
-                    override fun onAnimationEnd(view: View?) {
-                        super.onAnimationEnd(view)
-                        if (container.alpha == 0f) {
                             val parent = view?.parent
                             (parent as? ViewGroup)?.removeView(view)
                             isShow = false
-                            afterDestroy?.invoke()
+                            afterDismiss?.invoke()
+                            onAfterDismissListener?.invoke()
                         }
                     }
                 }).start()
@@ -468,6 +452,7 @@ class CoachMark private constructor(builder: Builder) {
         internal var pointerTooltipAlignment: Long = CoachMark.POINTER_MIDDLE
         internal var radius: Int = 5
         internal var onDismissListener: (() -> Unit)? = null
+        internal var onAfterDismissListener: (() -> Unit)? = null
         internal var tooltipShowAnimation: Animation? = null
         internal var tooltipDismissAnimation: Animation? = null
 
@@ -558,6 +543,11 @@ class CoachMark private constructor(builder: Builder) {
             return this
         }
 
+        fun setOnAfterDismissListener(onAfterDismiss: () -> Unit): Builder {
+            this.onAfterDismissListener = onAfterDismiss
+            return this
+        }
+
         fun setTooltipShowAnimation(tooltipShowAnimation: Animation): Builder {
             this.tooltipShowAnimation = tooltipShowAnimation
             return this
@@ -589,7 +579,7 @@ class CoachMark private constructor(builder: Builder) {
                 if (onClickTarget != null) {
                     onClickTarget?.invoke(coachMark)
                 } else {
-                    coachMark.destroy()
+                    coachMark.dismiss()
                 }
             })
             return coachMark

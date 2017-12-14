@@ -17,8 +17,6 @@ class CoachMarkSequence {
     private var onSequenceFinish: (() -> Unit)? = null
     private var onSequenceShowNext: ((CoachMarkSequence, CoachMark?) -> Unit)? = null
 
-    private val onClick: (CoachMark) -> Unit = { coachMark -> coachMark.destroy{ next() }}
-
     fun setCoachMarks(vararg coachMarks: CoachMark.Builder): CoachMarkSequence {
         Collections.addAll<CoachMark.Builder>(this.coachMarks, *coachMarks)
         return this
@@ -52,12 +50,15 @@ class CoachMarkSequence {
     }
 
     fun showNext() {
-        coachMark?.destroy { next() }
+        coachMark?.dismiss()
     }
 
     private operator fun next() {
         try {
-            coachMark = coachMarks.remove().setOnClickTarget(onClick).show()
+            coachMark = coachMarks.remove()
+                    .setOnClickTarget{ it.dismiss() }
+                    .setOnAfterDismissListener { next() }
+                    .show()
             onSequenceShowNext?.invoke(this, coachMark)
         } catch (e: NoSuchElementException) {
             onSequenceFinish?.invoke()
