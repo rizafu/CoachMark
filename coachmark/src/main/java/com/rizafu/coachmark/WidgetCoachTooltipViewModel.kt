@@ -1,18 +1,14 @@
 package com.rizafu.coachmark
 
-import android.databinding.BindingAdapter
-import android.databinding.ObservableArrayList
-import android.databinding.ObservableBoolean
-import android.databinding.ObservableInt
+import android.databinding.*
+import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-
-import java.util.ArrayList
+import java.util.*
 
 
 /**
@@ -22,14 +18,15 @@ import java.util.ArrayList
 class WidgetCoachTooltipViewModel {
     val tooltipChild: ObservableArrayList<View> = ObservableArrayList()
     val backgroundColor: ObservableInt = ObservableInt()
+    val backgroundColorString: ObservableField<String> = ObservableField()
     val matchWidth: ObservableBoolean = ObservableBoolean()
 
     fun isEmptyValue(): Boolean = tooltipChild.isEmpty()
 
     companion object {
 
-        @BindingAdapter("tooltipBackground", "tooltipMatchWidth")
-        @JvmStatic fun setBackground(layout: LinearLayout, color: Int?, matchWidth: Boolean? = false) {
+        @BindingAdapter("tooltipBackgroundColor","tooltipBackgroundColorString", "tooltipMatchWidth")
+        @JvmStatic fun setBackground(layout: LinearLayout, color: Int?, colorString: String?, matchWidth: Boolean? = false) {
             val params = LinearLayout.LayoutParams(if (matchWidth == true) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             layout.layoutParams = params
 
@@ -51,17 +48,38 @@ class WidgetCoachTooltipViewModel {
                 }
             }
 
+            colorString?.let {
+                try {
+                    if (matchWidth == true) {
+                        layout.setBackgroundColor(Color.parseColor(it))
+                    } else {// for rounded corner
+                        val drawable = ContextCompat.getDrawable(layout.context, R.drawable.shp_card)
+                        drawable?.setColorFilter(Color.parseColor(it), PorterDuff.Mode.MULTIPLY)
+                        drawable?.let { layout.background = it }
+                    }
+                } catch (e: IllegalArgumentException){
+                    e.printStackTrace()
+                }
+            }
 
             layout.invalidate()
         }
 
-        @BindingAdapter("tooltipTint")
-        @JvmStatic fun setTint(view: ImageView, color: Int?) {
+        @BindingAdapter("tooltipTintColor","tooltipTintColorString")
+        @JvmStatic fun setTint(view: ImageView, color: Int?, colorString: String?) {
             color?.let {
                 if (it == 0 || it < 0) {
                     view.setColorFilter(ContextCompat.getColor(view.context, android.R.color.white))
                 } else {
                     view.setColorFilter(ContextCompat.getColor(view.context, it))
+                }
+            }
+
+            colorString?.let {
+                try {
+                    view.setColorFilter(Color.parseColor(it))
+                } catch (e: IllegalArgumentException){
+                    e.printStackTrace()
                 }
             }
             view.invalidate()

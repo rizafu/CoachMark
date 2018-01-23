@@ -61,7 +61,7 @@ class CustomFragment : Fragment() {
                 2 -> CoachMark.Builder(it)
                         .setTarget(view)
                         .setOnClickTarget { coachMark ->
-                            coachMark.destroy()
+                            coachMark.dismiss()
                             Snackbar.make(view.rootView, "Action click on target mark", BaseTransientBottomBar.LENGTH_LONG).show()
                         }
                         .show()

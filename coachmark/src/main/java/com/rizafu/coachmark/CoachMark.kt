@@ -113,6 +113,7 @@ class CoachMark private constructor(builder: Builder) {
         this.radius = builder.radius
         this.backgroundAlpha = builder.backgroundAlpha
 
+        tooltipViewModel.backgroundColorString.set(builder.tooltipBackgroundColorString)
         tooltipViewModel.backgroundColor.set(builder.tooltipBackgroundColor)
         tooltipViewModel.tooltipChild.addAll(builder.tooltipChilds)
         tooltipViewModel.matchWidth.set(builder.tooltipMatchWidth)
@@ -448,6 +449,7 @@ class CoachMark private constructor(builder: Builder) {
         internal var isCircleMark: Boolean = false
         internal var tooltipMargin: Int = 5
         internal var tooltipBackgroundColor: Int = 0
+        internal var tooltipBackgroundColorString: String? = null
         internal var tooltipAlignment: Long = CoachMark.ROOT_BOTTOM
         internal var pointerTooltipAlignment: Long = CoachMark.POINTER_MIDDLE
         internal var radius: Int = 5
@@ -508,6 +510,11 @@ class CoachMark private constructor(builder: Builder) {
             return this
         }
 
+        fun setTooltipBackgroundColor(colorString: String): Builder {
+            this.tooltipBackgroundColorString = colorString
+            return this
+        }
+
         fun setTooltipMatchWidth(): Builder {
             this.tooltipMatchWidth = true
             return this
@@ -528,13 +535,28 @@ class CoachMark private constructor(builder: Builder) {
             return this
         }
 
-        fun addTooltipChildText(context: Context, message: String, @ColorRes textColor: Int): Builder {
+        private fun createTooltipChildText(context: Context, message: String = ""): TextView{
             val padding = ViewUtils.dpToPx(8)
             val textView = TextView(context)
             textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            textView.setTextColor(ContextCompat.getColor(context, textColor))
             textView.text = message
             textView.setPadding(padding, padding, padding, padding)
+            return textView
+        }
+
+        fun addTooltipChildText(context: Context, message: String, @ColorRes textColor: Int): Builder {
+            val textView = createTooltipChildText(context, message)
+            textView.setTextColor(ContextCompat.getColor(context, textColor))
+            return addTooltipChild(textView)
+        }
+
+        fun addTooltipChildText(context: Context, message: String, textColorString: String): Builder {
+            val textView = createTooltipChildText(context,message)
+            try {
+                textView.setTextColor(Color.parseColor(textColorString))
+            } catch (e: IllegalArgumentException){
+                textView.setTextColor(ContextCompat.getColor(context, android.R.color.black))
+            }
             return addTooltipChild(textView)
         }
 
