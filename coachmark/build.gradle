@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/rizafu/CoachMark'
     gitUrl = 'https://github.com/rizafu/CoachMark.git'
 
-    libraryVersion = '1.2.1'
+    libraryVersion = '1.2.2'
 
     developerId = 'rizafu'
     developerName = 'Riza Fathul Uzzy'
@@ -37,8 +37,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 10
-        versionName "1.2.1"
+        versionCode 11
+        versionName "1.2.2"
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
