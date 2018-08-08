@@ -31,12 +31,12 @@ tasks.withType(Javadoc).all {
 }
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 28
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 11
         versionName "1.2.2"
         vectorDrawables.useSupportLibrary = true
@@ -76,8 +76,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:support-v4:27.0.2'
     implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.20'
-    kapt 'com.android.databinding:compiler:3.0.1'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.60'
+    kapt 'com.android.databinding:compiler:3.1.4'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
