@@ -83,11 +83,11 @@ class CoachMark private constructor(builder: Builder) {
             return result
         }
 
-    @IntDef(ROOT_TOP, ROOT_CENTER, ROOT_BOTTOM, TARGET_TOP, TARGET_BOTTOM, TARGET_TOP_LEFT, TARGET_BOTTOM_LEFT, TARGET_TOP_RIGHT, TARGET_BOTTOM_RIGHT, TARGET_FILL_IN, TARGET_LEFT, TARGET_RIGHT)
+    @IntDef(ROOT_TOP.toInt(), ROOT_CENTER.toInt(), ROOT_BOTTOM.toInt(), TARGET_TOP.toInt(), TARGET_BOTTOM.toInt(), TARGET_TOP_LEFT.toInt(), TARGET_BOTTOM_LEFT.toInt(), TARGET_TOP_RIGHT.toInt(), TARGET_BOTTOM_RIGHT.toInt(), TARGET_FILL_IN.toInt(), TARGET_LEFT.toInt(), TARGET_RIGHT.toInt())
     @Retention(AnnotationRetention.SOURCE)
     annotation class TooltipAlignment
 
-    @IntDef(POINTER_RIGHT, POINTER_MIDDLE, POINTER_LEFT, POINTER_GONE)
+    @IntDef(POINTER_RIGHT.toInt(), POINTER_MIDDLE.toInt(), POINTER_LEFT.toInt(), POINTER_GONE.toInt())
     @Retention(AnnotationRetention.SOURCE)
     annotation class PointerTooltipAlignment
 
@@ -440,7 +440,7 @@ class CoachMark private constructor(builder: Builder) {
      */
     (internal val activity: Activity) {
         internal var target: View? = null
-        internal var tooltipChilds: ArrayList<View> =  ArrayList()
+        internal var tooltipChilds: ArrayList<View> = ArrayList()
         internal var markerPadding: Int = 0
         internal var tooltipMatchWidth: Boolean = false
         internal var backgroundAlpha: Float = 0.5f
@@ -450,8 +450,8 @@ class CoachMark private constructor(builder: Builder) {
         internal var tooltipMargin: Int = 5
         internal var tooltipBackgroundColor: Int = 0
         internal var tooltipBackgroundColorString: String? = null
-        internal var tooltipAlignment: Long = CoachMark.ROOT_BOTTOM
-        internal var pointerTooltipAlignment: Long = CoachMark.POINTER_MIDDLE
+        internal var tooltipAlignment: Long = ROOT_BOTTOM
+        internal var pointerTooltipAlignment: Long = POINTER_MIDDLE
         internal var radius: Int = 5
         internal var onDismissListener: (() -> Unit)? = null
         internal var onAfterDismissListener: (() -> Unit)? = null
