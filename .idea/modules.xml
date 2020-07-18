@@ -4,10 +4,11 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CoachMark.iml" filepath="$PROJECT_DIR$/CoachMark.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CoachMark-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CoachMark-app.iml" group="CoachMark/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/coachmark/CoachMark-coachmark.iml" filepath="$PROJECT_DIR$/.idea/modules/coachmark/CoachMark-coachmark.iml" group="CoachMark/coachmark" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CoachMark_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/CoachMark_buildSrc.iml" group="CoachMark/CoachMark_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Workspace-CoachMark.iml" filepath="$PROJECT_DIR$/.idea/modules/Workspace-CoachMark.iml" group="CoachMark" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/coachmark/coachmark.iml" filepath="$PROJECT_DIR$/coachmark/coachmark.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/coachmark/com.rizafu.coachmark-coachmark.iml" filepath="$PROJECT_DIR$/.idea/modules/coachmark/com.rizafu.coachmark-coachmark.iml" group="CoachMark/coachmark" />
     </modules>
   </component>
 </project>
