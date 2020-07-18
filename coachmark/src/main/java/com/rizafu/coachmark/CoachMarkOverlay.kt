@@ -1,12 +1,7 @@
 package com.rizafu.coachmark
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 
@@ -37,9 +32,7 @@ class CoachMarkOverlay : View {
     }
 
     private fun init() {
-        isDrawingCacheEnabled = true
-
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        setLayerType(LAYER_TYPE_HARDWARE, null)
     }
 
     fun addRect(x: Int, y: Int, width: Int, height: Int, radius: Int, padding: Int, isCircle: Boolean) {
